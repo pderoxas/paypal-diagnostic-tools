@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<StackPane fx:id="rootPane" focusTraversable="true" prefHeight="550.0" prefWidth="1100.0" style="-fx-background-color: #BDBDBD;" visible="true" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="com.paypal.merchant.retail.tools.controller.MainController">
+  <!--<StackPane fx:id="rootPane" focusTraversable="true" prefHeight="658.999977929685" prefWidth="890.0" style="-fx-background-color: #BDBDBD;" visible="true" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2">-->
+  <Pane fx:id="mainPane" focusTraversable="true" prefHeight="-1.0" prefWidth="-1.0" style="-fx-background-color: #FFFFFF;" visible="true">
+    <HBox fx:id="mainHBox" layoutX="0.0" layoutY="0.0" prefHeight="551.0" prefWidth="-1.0">
+      <children>
+        <Pane prefHeight="550.0" prefWidth="200.0" style="-fx-background-color: #333333" styleClass="bordered-titled-border">
+          <children>
+            <Button fx:id="btn_issueRefund" layoutX="105.0" layoutY="483.0" mnemonicParsing="false" onAction="#handleStop" prefHeight="52.0" prefWidth="78.9997727539012" styleClass="button-red" text="Stop" />
+            <Pane layoutX="10.0" layoutY="14.0" prefHeight="455.0" prefWidth="179.99985585937247" style="" styleClass="bordered-titled-border">
+              <children>
+                <GridPane fx:id="storeInfoGridPane" alignment="CENTER" hgap="5.0" layoutX="3.0" layoutY="105.0" prefHeight="128.0" prefWidth="176.9998948242137" vgap="0.0">
+                  <children>
+                    <Label alignment="CENTER_RIGHT" prefWidth="115.9998779296875" styleClass="font-xsmall" text="Set Loc Availability:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                    <Label alignment="CENTER_RIGHT" prefWidth="115.9998779296875" styleClass="font-xsmall" text="Get Location:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                    <Label alignment="CENTER_RIGHT" prefWidth="115.9998779296875" styleClass="font-xsmall" text="Authorize:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                    <Label alignment="CENTER_RIGHT" prefWidth="115.9998779296875" styleClass="font-xsmall" text="Cancel:" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+                    <Label fx:id="lbl_getLocationAvg" alignment="CENTER" contentDisplay="CENTER" prefWidth="104.00006103515625" styleClass="font-xsmall" text="Label" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                    <Label fx:id="lbl_setLocationAvailAvg" alignment="CENTER" contentDisplay="CENTER" prefWidth="104.00006103515625" styleClass="font-xsmall" text="Label" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                    <Label alignment="CENTER" contentDisplay="CENTER" prefWidth="104.00006103515625" styleClass="font-xsmall" text="Label" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                    <Label alignment="CENTER" contentDisplay="CENTER" prefWidth="104.00006103515625" styleClass="font-xsmall" text="Label" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                  </children>
+                  <columnConstraints>
+                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="151.0" minWidth="10.0" prefWidth="103.0" />
+                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="230.0" minWidth="10.0" prefWidth="54.0" />
+                  </columnConstraints>
+                  <padding>
+                    <Insets left="5.0" right="5.0" />
+                  </padding>
+                  <rowConstraints>
+                    <RowConstraints maxHeight="48.0" minHeight="10.0" prefHeight="48.0" vgrow="SOMETIMES" />
+                    <RowConstraints maxHeight="48.0" minHeight="10.0" prefHeight="48.0" vgrow="SOMETIMES" />
+                    <RowConstraints maxHeight="48.0" minHeight="10.0" prefHeight="48.0" vgrow="SOMETIMES" />
+                    <RowConstraints maxHeight="48.0" minHeight="10.0" prefHeight="48.0" vgrow="SOMETIMES" />
+                  </rowConstraints>
+                </GridPane>
+                <Label alignment="CENTER" contentDisplay="CENTER" layoutX="28.0" layoutY="15.0" prefHeight="52.0" prefWidth="123.9998779296875" text="Average Response Times" textAlignment="CENTER" wrapText="true" />
+              </children>
+            </Pane>
+            <Button fx:id="btn_manageStore" layoutX="18.0" layoutY="483.0" mnemonicParsing="false" onAction="#handleStart" prefHeight="52.0" prefWidth="78.99977792969003" styleClass="button-green" text="Start" />
+          </children>
+          <padding>
+            <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+          </padding>
+        </Pane>
+      </children>
+    </HBox>
+    <rotationAxis>
+      <Point3D />
+    </rotationAxis>
+    <stylesheets>
+      <URL value="@../styles/main.css" />
+    </stylesheets>
+  </Pane>
+  <Pane fx:id="processingPane" opacity="0.5" prefHeight="-1.0" prefWidth="-1.0" style="-fx-background-color: #A4A4A4;" visible="false">
+    <children>
+      <ImageView fx:id="img_processing" fitHeight="150.0" fitWidth="200.0" layoutX="363.0" layoutY="276.0" pickOnBounds="true" preserveRatio="true" />
+    </children>
+  </Pane>
+  <rotationAxis>
+    <Point3D />
+  </rotationAxis>
+  <stylesheets>
+    <URL value="@../styles/main.css" />
+  </stylesheets>
+</StackPane>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE properties
+        [
+                <!ELEMENT properties ( comment?, entry* ) >
+                <!ATTLIST properties version CDATA #FIXED "1.0">
+                <!ELEMENT comment (#PCDATA) >
+                <!ELEMENT entry (#PCDATA) >
+                <!ATTLIST entry key CDATA #REQUIRED>
+                ]>
+<properties>
+    <comment>
+        This file must exist in the classpath OR be defined as -Dproperties.xml=/path/to/[name-of-properties-file.xml]
+        via command line
+    </comment>
+
+    <entry key="application.title">PayPal Retail SDK Tool</entry>
+    <entry key="application.version">${project.version}</entry>
+    <entry key="store.manager">Joseph Smith</entry>
+
+    <!-- SDK Location Info -->
+    <!-- This value must match a <Store id="XXXX"> entry in the Config.xml -->
+    <entry key="sdk.store.id">SanJose</entry>
+    <!--<entry key="sdk.store.id">1S1373571438-1</entry>-->
+
+    <!-- number of seconds before SDK command times out -->
+    <entry key="sdk.service.timeout.seconds">10</entry>
+
+    <!-- whether retry should be enabled (true/false) -->
+    <entry key="sdk.service.retry.enabled.flag">false</entry>
+
+    <!-- number of seconds between retries -->
+    <entry key="sdk.service.retry.interval.seconds">15</entry>
+
+    <!-- maximum number of retries before quitting -->
+    <entry key="sdk.service.retry.max.attempts">3</entry>
+
+</properties>
