@@ -8,6 +8,9 @@ public class Stat {
     private long elapsedTime;
     private boolean isSuccessful;
 
+    public Stat() {
+    }
+
     public Stat(long startTime, long elapsedTime, boolean isSuccessful) {
         this.startTime = startTime;
         this.elapsedTime = elapsedTime;

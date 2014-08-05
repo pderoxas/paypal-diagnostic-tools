@@ -1,9 +1,7 @@
 package com.paypal.merchant.retail.tools;
 
-import com.paypal.merchant.retail.sdk.contract.entities.Location;
 import com.paypal.merchant.retail.tools.client.SdkClient;
 import com.paypal.merchant.retail.tools.controller.MainController;
-import com.paypal.merchant.retail.tools.exception.ClientException;
 import com.paypal.merchant.retail.tools.util.PropertyManager;
 import javafx.animation.FadeTransition;
 import javafx.application.Application;
@@ -35,10 +33,7 @@ import org.slf4j.LoggerFactory;
  */
 public final class Main extends Application {
     private static Logger logger = LoggerFactory.getLogger(Main.class);
-
-    //public static MainController controller;
     private static FXMLLoader fxmlLoader;
-    private static Location sdkLocation;
     private static Parent root;
 
     private Pane splashLayout;
@@ -57,13 +52,6 @@ public final class Main extends Application {
         }
     }
 
-    public static void setLocation(Location sdkLocation) {
-        Main.sdkLocation = sdkLocation;
-    }
-
-    public static Location getLocation() {
-        return sdkLocation;
-    }
 
     public static MainController getController(){
         return fxmlLoader.getController();
@@ -87,11 +75,22 @@ public final class Main extends Application {
         final Task getLocationTask = new Task() {
             @Override protected Void call() throws InterruptedException {
                 updateMessage("Getting Store Location information . . .");
-                try {
-                    sdkLocation = SdkClient.INSTANCE.getSdkLocation();
-                } catch (ClientException e) {
-                    logger.error("Failed to get Store Location Information");
-                }
+
+                // TODO: implement some initialization
+                SdkClient.INSTANCE.initialize();
+
+//                BigDecimal amount = BigDecimal.valueOf(0.01);
+//                String payCode = "6506000136356447";
+//                try {
+//                    String authorizationTransactionId = SdkClient.INSTANCE.getAuthorizationTransactionId(payCode, amount);
+//                    logger.debug("Approval Code: " + authorizationTransactionId);
+//
+//                    String voidAuthCode = SdkClient.INSTANCE.getVoidAuthorizationId(authorizationTransactionId);
+//                    logger.debug("Void Authorization Code: " + voidAuthCode);
+//                } catch (ClientException e) {
+//                    e.printStackTrace();
+//                }
+
                 updateMessage("Success");
                 Platform.runLater(() -> showMainStage());
                 return null;

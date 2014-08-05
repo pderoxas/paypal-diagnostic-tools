@@ -13,7 +13,7 @@
         via command line
     </comment>
 
-    <entry key="application.title">PayPal Retail SDK Tool</entry>
+    <entry key="application.title">PayPal Retail SDK Diagnostic Tool</entry>
     <entry key="application.version">${project.version}</entry>
     <entry key="store.manager">Joseph Smith</entry>
 
@@ -23,15 +23,12 @@
     <!--<entry key="sdk.store.id">1S1373571438-1</entry>-->
 
     <!-- number of seconds before SDK command times out -->
-    <entry key="sdk.service.timeout.seconds">10</entry>
+    <entry key="sdk.service.timeout.seconds">30</entry>
 
-    <!-- whether retry should be enabled (true/false) -->
-    <entry key="sdk.service.retry.enabled.flag">false</entry>
+    <!-- number of seconds between service calls -->
+    <entry key="sdk.service.interval.seconds">1800</entry>
 
-    <!-- number of seconds between retries -->
-    <entry key="sdk.service.retry.interval.seconds">15</entry>
-
-    <!-- maximum number of retries before quitting -->
-    <entry key="sdk.service.retry.max.attempts">3</entry>
+    <!-- the maximum number or stats reported per service. Oldest stats will be discarded -->
+    <entry key="max.number.stats">60</entry>
 
 </properties>

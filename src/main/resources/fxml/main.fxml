@@ -2,38 +2,44 @@
 
 <?import java.lang.*?>
 <?import java.net.*?>
+<?import javafx.collections.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.image.*?>
 <?import javafx.scene.layout.*?>
 
-<StackPane fx:id="rootPane" focusTraversable="true" prefHeight="550.0" prefWidth="1100.0" style="-fx-background-color: #BDBDBD;" visible="true" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="com.paypal.merchant.retail.tools.controller.MainController">
+<StackPane fx:id="rootPane" focusTraversable="true" prefHeight="600.0" prefWidth="1150.0" style="-fx-background-color: #BDBDBD;" visible="true" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2" fx:controller="com.paypal.merchant.retail.tools.controller.MainController">
   <!--<StackPane fx:id="rootPane" focusTraversable="true" prefHeight="658.999977929685" prefWidth="890.0" style="-fx-background-color: #BDBDBD;" visible="true" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/2.2">-->
-  <Pane fx:id="mainPane" focusTraversable="true" prefHeight="-1.0" prefWidth="-1.0" style="-fx-background-color: #FFFFFF;" visible="true">
-    <HBox fx:id="mainHBox" layoutX="0.0" layoutY="0.0" prefHeight="551.0" prefWidth="-1.0">
+  <Pane fx:id="mainPane" focusTraversable="true" prefHeight="-1.0" prefWidth="-1.0" style="-fx-background-color: #FFFFFF;" visible="true" StackPane.alignment="BOTTOM_LEFT">
+    <HBox fx:id="mainHBox" layoutX="0.0" layoutY="23.0" prefHeight="-1.0" prefWidth="-1.0">
       <children>
-        <Pane prefHeight="550.0" prefWidth="200.0" style="-fx-background-color: #333333" styleClass="bordered-titled-border">
+        <Pane prefHeight="577.0" prefWidth="250.0" style="-fx-background-color: #333333" styleClass="bordered-titled-border">
           <children>
-            <Button fx:id="btn_issueRefund" layoutX="105.0" layoutY="483.0" mnemonicParsing="false" onAction="#handleStop" prefHeight="52.0" prefWidth="78.9997727539012" styleClass="button-red" text="Stop" />
-            <Pane layoutX="10.0" layoutY="14.0" prefHeight="455.0" prefWidth="179.99985585937247" style="" styleClass="bordered-titled-border">
+            <Pane layoutX="8.0" layoutY="8.0" prefHeight="204.0" prefWidth="235.0" style="" styleClass="bordered-titled-border">
               <children>
-                <GridPane fx:id="storeInfoGridPane" alignment="CENTER" hgap="5.0" layoutX="3.0" layoutY="105.0" prefHeight="128.0" prefWidth="176.9998948242137" vgap="0.0">
+                <Button fx:id="btn_send" layoutX="67.0" layoutY="151.0" mnemonicParsing="false" onAction="#handleSend" prefHeight="41.0" prefWidth="101.9997474121119" styleClass="button-medium, button-blue" text="Send" />
+                <GridPane id="storeInfoGridPane" alignment="CENTER" hgap="5.0" layoutX="18.0" layoutY="34.0" prefHeight="112.0" prefWidth="215.0000168945262" vgap="0.0">
                   <children>
-                    <Label alignment="CENTER_RIGHT" prefWidth="115.9998779296875" styleClass="font-xsmall" text="Set Loc Availability:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
-                    <Label alignment="CENTER_RIGHT" prefWidth="115.9998779296875" styleClass="font-xsmall" text="Get Location:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
-                    <Label alignment="CENTER_RIGHT" prefWidth="115.9998779296875" styleClass="font-xsmall" text="Authorize:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
-                    <Label alignment="CENTER_RIGHT" prefWidth="115.9998779296875" styleClass="font-xsmall" text="Cancel:" GridPane.columnIndex="0" GridPane.rowIndex="3" />
-                    <Label fx:id="lbl_getLocationAvg" alignment="CENTER" contentDisplay="CENTER" prefWidth="104.00006103515625" styleClass="font-xsmall" text="Label" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="0" />
-                    <Label fx:id="lbl_setLocationAvailAvg" alignment="CENTER" contentDisplay="CENTER" prefWidth="104.00006103515625" styleClass="font-xsmall" text="Label" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-                    <Label alignment="CENTER" contentDisplay="CENTER" prefWidth="104.00006103515625" styleClass="font-xsmall" text="Label" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="2" />
-                    <Label alignment="CENTER" contentDisplay="CENTER" prefWidth="104.00006103515625" styleClass="font-xsmall" text="Label" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                    <Label alignment="CENTER_RIGHT" prefWidth="150.0" style="" styleClass="font-nav-keys" text="Open Location:" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                    <Label alignment="CENTER_RIGHT" prefWidth="150.0" style="" styleClass="font-nav-keys" text="Get Location:" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                    <Label alignment="CENTER_RIGHT" prefWidth="150.0" style="" styleClass="font-nav-keys" text="Authorize:" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                    <Label alignment="CENTER_RIGHT" prefWidth="150.0" style="" styleClass="font-nav-keys" text="Void:" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                    <Label fx:id="lbl_getLocationSingle" alignment="CENTER" contentDisplay="CENTER" prefWidth="104.00006103515625" style="" styleClass="font-nav-values" text="0" textAlignment="CENTER" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+                    <Label fx:id="lbl_setLocationAvailSingle" alignment="CENTER" contentDisplay="CENTER" prefWidth="104.00006103515625" style="" styleClass="font-nav-values" text="0" textAlignment="CENTER" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                    <Label fx:id="lbl_authorizeSingle" alignment="CENTER" contentDisplay="CENTER" prefWidth="104.00006103515625" style="" styleClass="font-nav-values" text="0" textAlignment="CENTER" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                    <Label fx:id="lbl_voidSingle" alignment="CENTER" contentDisplay="CENTER" prefWidth="104.00006103515625" style="" styleClass="font-nav-values" text="0" textAlignment="CENTER" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                    <CheckBox fx:id="chk_getLocationSingle" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" selected="true" text="" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                    <CheckBox fx:id="chk_openLocationSingle" mnemonicParsing="false" selected="true" text="" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                    <CheckBox fx:id="chk_authorizeSingle" mnemonicParsing="false" selected="true" text="" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                    <CheckBox fx:id="chk_voidSingle" mnemonicParsing="false" selected="true" text="" GridPane.columnIndex="0" GridPane.rowIndex="3" />
                   </children>
                   <columnConstraints>
-                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="151.0" minWidth="10.0" prefWidth="103.0" />
-                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="230.0" minWidth="10.0" prefWidth="54.0" />
+                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="151.0" minWidth="10.0" prefWidth="18.0" />
+                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="151.0" minWidth="10.0" prefWidth="106.0" />
+                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="230.0" minWidth="10.0" prefWidth="79.0" />
                   </columnConstraints>
                   <padding>
-                    <Insets left="5.0" right="5.0" />
+                    <Insets left="2.0" />
                   </padding>
                   <rowConstraints>
                     <RowConstraints maxHeight="48.0" minHeight="10.0" prefHeight="48.0" vgrow="SOMETIMES" />
@@ -42,10 +48,110 @@
                     <RowConstraints maxHeight="48.0" minHeight="10.0" prefHeight="48.0" vgrow="SOMETIMES" />
                   </rowConstraints>
                 </GridPane>
-                <Label alignment="CENTER" contentDisplay="CENTER" layoutX="28.0" layoutY="15.0" prefHeight="52.0" prefWidth="123.9998779296875" text="Average Response Times" textAlignment="CENTER" wrapText="true" />
+                <Label layoutX="14.0" layoutY="7.0" text="Show" />
+                <Label layoutX="91.0" layoutY="7.0" text="Service" />
+                <Label layoutX="160.0" layoutY="7.0" text="Time (ms)" />
+                <Separator layoutX="18.0" layoutY="25.0" prefHeight="14.583984375" prefWidth="200.0" />
               </children>
             </Pane>
-            <Button fx:id="btn_manageStore" layoutX="18.0" layoutY="483.0" mnemonicParsing="false" onAction="#handleStart" prefHeight="52.0" prefWidth="78.99977792969003" styleClass="button-green" text="Start" />
+            <Pane layoutX="8.0" layoutY="219.0" prefHeight="352.0" prefWidth="235.0" style="" styleClass="bordered-titled-border">
+              <children>
+                <GridPane fx:id="settingsGridPane" alignment="CENTER" hgap="5.0" layoutX="10.0" layoutY="166.0" prefHeight="125.0" prefWidth="215.0000168945262" vgap="0.0">
+                  <children>
+                    <Label alignment="CENTER_RIGHT" minHeight="-1.0" prefHeight="-1.0" prefWidth="134.0" style="" styleClass="font-nav-keys" text="Interval (mins):" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                    <Label alignment="CENTER_RIGHT" minHeight="-1.0" prefHeight="-1.0" prefWidth="134.0" style="" styleClass="font-nav-keys" text="Timeout (secs):" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                    <Label alignment="CENTER_RIGHT" minHeight="-1.0" prefHeight="-1.0" prefWidth="134.0" style="" styleClass="font-nav-keys" text="Sample Size:" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+                    <ChoiceBox fx:id="cb_sampleSize" style="-fx-font-size: 14px;" GridPane.columnIndex="1" GridPane.rowIndex="3">
+                      <items>
+                        <FXCollections fx:factory="observableArrayList">
+                          <String fx:value="Item 1" />
+                          <String fx:value="Item 2" />
+                          <String fx:value="Item 3" />
+                        </FXCollections>
+                      </items>
+                    </ChoiceBox>
+                    <ChoiceBox fx:id="cb_interval" style="-fx-font-size: 14px;" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                      <items>
+                        <FXCollections fx:factory="observableArrayList">
+                          <String fx:value="Item 1" />
+                          <String fx:value="Item 2" />
+                          <String fx:value="Item 3" />
+                        </FXCollections>
+                      </items>
+                    </ChoiceBox>
+                    <ChoiceBox fx:id="cb_timeoutValue" style="-fx-font-size: 14px;" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                      <items>
+                        <FXCollections fx:factory="observableArrayList">
+                          <String fx:value="Item 1" />
+                          <String fx:value="Item 2" />
+                          <String fx:value="Item 3" />
+                        </FXCollections>
+                      </items>
+                    </ChoiceBox>
+                    <Label alignment="CENTER_RIGHT" minHeight="-1.0" prefHeight="-1.0" prefWidth="134.0" style="" styleClass="font-nav-keys" text="Duration (mins):" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                    <ChoiceBox id="cb_interval" fx:id="cb_duration" style="-fx-font-size: 14px;" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                      <items>
+                        <FXCollections fx:factory="observableArrayList">
+                          <String fx:value="Item 1" />
+                          <String fx:value="Item 2" />
+                          <String fx:value="Item 3" />
+                        </FXCollections>
+                      </items>
+                    </ChoiceBox>
+                  </children>
+                  <columnConstraints>
+                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="151.0" minWidth="10.0" prefWidth="140.0" />
+                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="230.0" minWidth="10.0" prefWidth="73.0" />
+                  </columnConstraints>
+                  <padding>
+                    <Insets />
+                  </padding>
+                  <rowConstraints>
+                    <RowConstraints maxHeight="48.0" minHeight="10.0" prefHeight="48.0" vgrow="SOMETIMES" />
+                    <RowConstraints maxHeight="48.0" minHeight="10.0" prefHeight="48.0" vgrow="SOMETIMES" />
+                    <RowConstraints maxHeight="48.0" minHeight="10.0" prefHeight="48.0" vgrow="SOMETIMES" />
+                    <RowConstraints maxHeight="48.0" minHeight="10.0" prefHeight="48.0" vgrow="SOMETIMES" />
+                  </rowConstraints>
+                </GridPane>
+                <Button fx:id="btn_manageStore" layoutX="13.0" layoutY="301.0" mnemonicParsing="false" onAction="#handleStart" prefHeight="41.0" prefWidth="101.9997474121119" styleClass="button-green, button-medium" text="Start" />
+                <Button fx:id="btn_issueRefund" layoutX="121.0" layoutY="301.0" mnemonicParsing="false" onAction="#handleStop" prefHeight="41.0" prefWidth="101.9997727539012" styleClass="button-red, button-medium" text="Stop" />
+                <GridPane fx:id="storeInfoGridPane" alignment="CENTER" hgap="5.0" layoutX="14.0" layoutY="32.0" prefHeight="125.0" prefWidth="215.0000168945262" vgap="0.0">
+                  <children>
+                    <Label alignment="CENTER_RIGHT" prefWidth="150.0" style="" styleClass="font-nav-keys" text="Open Location:" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                    <Label alignment="CENTER_RIGHT" prefWidth="150.0" style="" styleClass="font-nav-keys" text="Get Location:" GridPane.columnIndex="1" GridPane.rowIndex="0" />
+                    <Label alignment="CENTER_RIGHT" prefWidth="150.0" style="" styleClass="font-nav-keys" text="Authorize:" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                    <Label alignment="CENTER_RIGHT" prefWidth="150.0" style="" styleClass="font-nav-keys" text="Void:" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                    <Label fx:id="lbl_getLocationAvg" alignment="CENTER" contentDisplay="CENTER" prefWidth="104.00006103515625" style="" styleClass="font-nav-values" text="0" textAlignment="CENTER" GridPane.columnIndex="2" GridPane.rowIndex="0" />
+                    <Label fx:id="lbl_setLocationAvailAvg" alignment="CENTER" contentDisplay="CENTER" prefWidth="104.00006103515625" style="" styleClass="font-nav-values" text="0" textAlignment="CENTER" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                    <Label fx:id="lbl_authorizeAvg" alignment="CENTER" contentDisplay="CENTER" prefWidth="104.00006103515625" style="" styleClass="font-nav-values" text="0" textAlignment="CENTER" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                    <Label fx:id="lbl_voidAvg" alignment="CENTER" contentDisplay="CENTER" prefWidth="104.00006103515625" style="" styleClass="font-nav-values" text="0" textAlignment="CENTER" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                    <CheckBox fx:id="chk_getLocation" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" selected="true" text="" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                    <CheckBox fx:id="chk_openLocation" mnemonicParsing="false" selected="true" text="" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                    <CheckBox fx:id="chk_authorize" mnemonicParsing="false" selected="true" text="" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                    <CheckBox fx:id="chk_void" mnemonicParsing="false" selected="true" text="" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+                  </children>
+                  <columnConstraints>
+                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="151.0" minWidth="10.0" prefWidth="18.0" />
+                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="151.0" minWidth="10.0" prefWidth="106.0" />
+                    <ColumnConstraints hgrow="SOMETIMES" maxWidth="230.0" minWidth="10.0" prefWidth="79.0" />
+                  </columnConstraints>
+                  <padding>
+                    <Insets left="2.0" />
+                  </padding>
+                  <rowConstraints>
+                    <RowConstraints maxHeight="48.0" minHeight="10.0" prefHeight="48.0" vgrow="SOMETIMES" />
+                    <RowConstraints maxHeight="48.0" minHeight="10.0" prefHeight="48.0" vgrow="SOMETIMES" />
+                    <RowConstraints maxHeight="48.0" minHeight="10.0" prefHeight="48.0" vgrow="SOMETIMES" />
+                    <RowConstraints maxHeight="48.0" minHeight="10.0" prefHeight="48.0" vgrow="SOMETIMES" />
+                  </rowConstraints>
+                </GridPane>
+                <Separator layoutX="14.0" layoutY="159.0" prefHeight="7.416015625" prefWidth="200.0" />
+                <Label layoutX="10.0" layoutY="7.0" text="Show" />
+                <Label layoutX="87.0" layoutY="7.0" text="Service" />
+                <Label layoutX="162.0" layoutY="7.0" text="Avg (ms)" />
+                <Separator layoutX="14.0" layoutY="22.0" prefHeight="14.583984375" prefWidth="200.0" />
+              </children>
+            </Pane>
           </children>
           <padding>
             <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
@@ -53,6 +159,7 @@
         </Pane>
       </children>
     </HBox>
+    <MenuBar fx:id="mb_menuBar" layoutX="0.0" layoutY="0.0" prefHeight="23.0" prefWidth="1150.0" style="-fx-background-color: #DCDCDC" />
     <rotationAxis>
       <Point3D />
     </rotationAxis>

@@ -43,7 +43,7 @@ public class OneTimeTaskScheduler extends TaskScheduler {
         if(scheduledFutureMap != null) {
             logger.info("Stop the task scheduler. No more future tasks will be executed.");
             for(ScheduledFuture<?> scheduledFuture : scheduledFutureMap.values()) {
-                scheduledFuture.cancel(true);
+                scheduledFuture.cancel(false);
             }
         }
     }

@@ -18,8 +18,19 @@ root {
     -fx-font-family: "Verdana";
 }
 
+
+.font-nav-keys {
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+}
+
+.font-nav-values {
+    -fx-font-size: 12px;
+}
+
+
 .font-xsmall {
-    -fx-font-size: 9px;
+    -fx-font-size: 10px;
 }
 .font-small {
     -fx-font-size: 12px;
@@ -32,6 +43,10 @@ root {
 }
 .font-xxlarge {
     -fx-font-size: 48px;
+}
+
+.text-field-medium {
+    -fx-padding: 2 2 2 2;
 }
 
 .text-field-large {

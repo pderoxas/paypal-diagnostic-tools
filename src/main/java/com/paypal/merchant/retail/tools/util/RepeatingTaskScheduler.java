@@ -18,12 +18,19 @@ public class RepeatingTaskScheduler extends TaskScheduler {
     private long initialWait;
     private long interval;
     private TimeUnit timeUnit;
+    private long startTime;
+    private long duration;
 
-    public RepeatingTaskScheduler(final Map<String, Runnable> runnableMap, long initialWait, long interval, int threadPoolSize, TimeUnit timeUnit) {
-        super(runnableMap, threadPoolSize);
+    public RepeatingTaskScheduler(final Map<String, Runnable> runnableMap, long initialWait, long interval, int threadPoolSize, TimeUnit timeUnit, long duration) {
+        super(runnableMap, duration > 0 ? threadPoolSize + 1 : threadPoolSize);
         this.initialWait = initialWait;
         this.interval = interval;
         this.timeUnit = timeUnit;
+        this.duration = duration;
+        if(duration > 0) {
+            runnableMap.put("DurationTimer", durationTimer);
+        }
+        this.startTime = System.currentTimeMillis() + initialWait;
     }
 
     @Override
@@ -45,7 +52,7 @@ public class RepeatingTaskScheduler extends TaskScheduler {
         if(scheduledFutureMap != null) {
             logger.info("Stop the task scheduler. No more future tasks will be executed.");
             for(ScheduledFuture<?> scheduledFuture : scheduledFutureMap.values()) {
-                scheduledFuture.cancel(true);
+                scheduledFuture.cancel(false);
             }
         }
     }
@@ -57,4 +64,17 @@ public class RepeatingTaskScheduler extends TaskScheduler {
         }
         return 0;
     }
+
+    /**
+     * This set the location availability via the SDK
+     */
+    public final Runnable durationTimer = () -> {
+        try {
+            if(System.currentTimeMillis() - startTime > duration) {
+                stop();
+            }
+        } catch (Exception e) {
+            logger.error("Failed to stop the scheduler after duration period has elapsed.", e);
+        }
+    };
 }
