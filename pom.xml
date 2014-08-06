@@ -6,7 +6,7 @@
 
     <groupId>com.paypal.merchant.retail</groupId>
     <artifactId>sdk-diagnostic-tools</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0.0</version>
     <organization>
         <name>PayPal</name>
     </organization>
@@ -59,6 +59,16 @@
 
         <!-- Third-party Tools -->
         <dependency>
+            <groupId>org.controlsfx</groupId>
+            <artifactId>controlsfx</artifactId>
+            <version>8.0.6</version>
+        </dependency>
+        <dependency>
+            <groupId>com.thoughtworks.xstream</groupId>
+            <artifactId>xstream</artifactId>
+            <version>1.4.7</version>
+        </dependency>
+        <dependency>
             <groupId>org.apache.commons</groupId>
             <artifactId>commons-lang3</artifactId>
             <version>3.3.2</version>
@@ -101,7 +111,49 @@
                     </dependency>
                 </dependencies>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>2.2</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <transformers>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>com.paypal.merchant.retail.tools.Main</mainClass>
+                                    <manifestEntries>
+                                        <!-- Define the classpath including the individual SDK jars -->
+                                        <Class-Path>./ ./paypal-pos-sdk.jar ./paypal-retail-api-log4jLogger.jar ./paypal-retail-api-sdk-resources.jar</Class-Path>
+                                        <Version>${version}</Version>
+                                        <Build-Time>${maven.build.timestamp}</Build-Time>
+                                        <Build-User>${user.name}</Build-User>
+                                        <Build-Java>${java.version}</Build-Java>
+                                        <Build-OS>${os.name}</Build-OS>
+                                        <Build-Label>${project.version}</Build-Label>
+                                        <Build-Path>${basedir}</Build-Path>
+                                    </manifestEntries>
+                                </transformer>
+                            </transformers>
 
+                            <filters>
+                                <filter>
+                                    <artifact>com.paypal.merchant.retail:*</artifact>
+                                    <!--exclude the config and sample files from the uber jar-->
+                                    <excludes>
+                                        <exclude>Config.xml</exclude>
+                                        <exclude>log4j.xml</exclude>
+                                        <exclude>sdk-tool-properties.xml</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <artifactId>maven-resources-plugin</artifactId>
                 <version>2.6</version>
@@ -121,6 +173,26 @@
                                     <filtering>true</filtering>
                                     <includes>
                                         <include>**.xml</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <!-- copy the launch.cmd file to the target dir-->
+                        <id>copy-launch-file</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>target</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${basedir}/src/main/</directory>
+                                    <filtering>false</filtering>
+                                    <includes>
+                                        <include>launch.cmd</include>
                                     </includes>
                                 </resource>
                             </resources>

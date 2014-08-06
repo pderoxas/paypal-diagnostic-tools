@@ -27,6 +27,8 @@ import javafx.util.Duration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
+
 /**
  * Created by pderoxas on 2/26/14.
  * This is the main class of the Demo POS Application
@@ -41,6 +43,8 @@ public final class Main extends Application {
     private Label progressText;
     private static final int SPLASH_WIDTH = 687;
     private static final int SPLASH_HEIGHT = 181;
+
+    public static Stage mainStage;
 
     public static void main(String[] args) {
         logger.info("Launching Merchant SDK Tool");
@@ -74,25 +78,14 @@ public final class Main extends Application {
     public void start(Stage initStage) throws Exception {
         final Task getLocationTask = new Task() {
             @Override protected Void call() throws InterruptedException {
-                updateMessage("Getting Store Location information . . .");
+                updateMessage("Initializing . . .");
 
                 // TODO: implement some initialization
                 SdkClient.INSTANCE.initialize();
 
-//                BigDecimal amount = BigDecimal.valueOf(0.01);
-//                String payCode = "6506000136356447";
-//                try {
-//                    String authorizationTransactionId = SdkClient.INSTANCE.getAuthorizationTransactionId(payCode, amount);
-//                    logger.debug("Approval Code: " + authorizationTransactionId);
-//
-//                    String voidAuthCode = SdkClient.INSTANCE.getVoidAuthorizationId(authorizationTransactionId);
-//                    logger.debug("Void Authorization Code: " + voidAuthCode);
-//                } catch (ClientException e) {
-//                    e.printStackTrace();
-//                }
-
                 updateMessage("Success");
                 Platform.runLater(() -> showMainStage());
+
                 return null;
             }
         };
@@ -103,8 +96,9 @@ public final class Main extends Application {
 
     private static void showMainStage() {
         try{
+            String workingDir = System.getProperty("user.dir");
+            File initialDir = new File(workingDir + "/data");
 
-            //fxmlLoader.setController(controller);
 
             root = fxmlLoader.load();
             root.setId("rootGroup");
@@ -112,7 +106,7 @@ public final class Main extends Application {
             Scene scene = new Scene(root);
             scene.getStylesheets().add("/styles/main.css");
 
-            Stage mainStage = new Stage(StageStyle.DECORATED);
+            mainStage = new Stage(StageStyle.DECORATED);
             mainStage.setScene(scene);
             mainStage.setTitle(PropertyManager.INSTANCE.getProperty("application.title"));
             mainStage.show();

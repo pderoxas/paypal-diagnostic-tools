@@ -19,9 +19,7 @@ import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.concurrent.TimeUnit;
 
@@ -49,6 +47,7 @@ public enum SdkClient {
     private List<Stat> openLocationStats = new ArrayList<>();
     private List<Stat> authorizationStats = new ArrayList<>();
     private List<Stat> voidStats = new ArrayList<>();
+    private Map<String, List<Stat>> lineChartData;
 
     private SdkClient() {
         try {
@@ -67,6 +66,12 @@ public enum SdkClient {
             builderContext.setStoreId(STORE_ID);
             commandBuilder = sdkImpl.newCommandBuilder(builderContext);
 
+            lineChartData = new HashMap<>(4);
+            lineChartData.put("GetLocation", getLocationStats);
+            lineChartData.put("OpenLocation", openLocationStats);
+            lineChartData.put("Authorization", authorizationStats);
+            lineChartData.put("Void", voidStats);
+
             logger.debug("Finished initializing SdkClient");
         } catch (Exception e) {
             logger.error("Failed to initialize the SdkClient singleton");
@@ -75,6 +80,10 @@ public enum SdkClient {
 
     public void initialize() {
         logger.info("Initializing . . .");
+    }
+
+    public Map<String, List<Stat>> getLineChartData() {
+        return lineChartData;
     }
 
     public Stat getGetLocationStat() {
@@ -264,13 +273,14 @@ public enum SdkClient {
             logger.error("Failed to set Store Location Availability");
         } finally {
             elapsedTime = System.nanoTime() - startTime;
-            logger.debug("adding new Stat to getLocationData");
+            logger.debug("adding new Stat to REPEATING_GET_LOCATION_PLOTS");
+
             oneTimeCommandStat.setStartTime(startTimestamp);
             oneTimeCommandStat.setElapsedTime(elapsedTime);
             oneTimeCommandStat.setSuccessful(isSuccessful);
 
             if(isRepeating) {
-                repeatingCommandStats.add(oneTimeCommandStat);
+                repeatingCommandStats.add(new Stat(startTimestamp, elapsedTime, isSuccessful));
             }
 
         }

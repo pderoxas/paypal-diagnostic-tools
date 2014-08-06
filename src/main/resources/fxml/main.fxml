@@ -113,8 +113,8 @@
                     <RowConstraints maxHeight="48.0" minHeight="10.0" prefHeight="48.0" vgrow="SOMETIMES" />
                   </rowConstraints>
                 </GridPane>
-                <Button fx:id="btn_manageStore" layoutX="13.0" layoutY="301.0" mnemonicParsing="false" onAction="#handleStart" prefHeight="41.0" prefWidth="101.9997474121119" styleClass="button-green, button-medium" text="Start" />
-                <Button fx:id="btn_issueRefund" layoutX="121.0" layoutY="301.0" mnemonicParsing="false" onAction="#handleStop" prefHeight="41.0" prefWidth="101.9997727539012" styleClass="button-red, button-medium" text="Stop" />
+                <Button fx:id="btn_start" layoutX="13.0" layoutY="301.0" mnemonicParsing="false" onAction="#handleStart" prefHeight="41.0" prefWidth="101.9997474121119" styleClass="button-green, button-medium" text="Start" />
+                <Button fx:id="btn_stop" layoutX="121.0" layoutY="301.0" mnemonicParsing="false" onAction="#handleStop" prefHeight="41.0" prefWidth="101.9997727539012" styleClass="button-red, button-medium" text="Stop" />
                 <GridPane fx:id="storeInfoGridPane" alignment="CENTER" hgap="5.0" layoutX="14.0" layoutY="32.0" prefHeight="125.0" prefWidth="215.0000168945262" vgap="0.0">
                   <children>
                     <Label alignment="CENTER_RIGHT" prefWidth="150.0" style="" styleClass="font-nav-keys" text="Open Location:" GridPane.columnIndex="1" GridPane.rowIndex="1" />
@@ -122,7 +122,7 @@
                     <Label alignment="CENTER_RIGHT" prefWidth="150.0" style="" styleClass="font-nav-keys" text="Authorize:" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                     <Label alignment="CENTER_RIGHT" prefWidth="150.0" style="" styleClass="font-nav-keys" text="Void:" GridPane.columnIndex="1" GridPane.rowIndex="3" />
                     <Label fx:id="lbl_getLocationAvg" alignment="CENTER" contentDisplay="CENTER" prefWidth="104.00006103515625" style="" styleClass="font-nav-values" text="0" textAlignment="CENTER" GridPane.columnIndex="2" GridPane.rowIndex="0" />
-                    <Label fx:id="lbl_setLocationAvailAvg" alignment="CENTER" contentDisplay="CENTER" prefWidth="104.00006103515625" style="" styleClass="font-nav-values" text="0" textAlignment="CENTER" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                    <Label fx:id="lbl_openLocationAvg" alignment="CENTER" contentDisplay="CENTER" prefWidth="104.00006103515625" style="" styleClass="font-nav-values" text="0" textAlignment="CENTER" GridPane.columnIndex="2" GridPane.rowIndex="1" />
                     <Label fx:id="lbl_authorizeAvg" alignment="CENTER" contentDisplay="CENTER" prefWidth="104.00006103515625" style="" styleClass="font-nav-values" text="0" textAlignment="CENTER" GridPane.columnIndex="2" GridPane.rowIndex="2" />
                     <Label fx:id="lbl_voidAvg" alignment="CENTER" contentDisplay="CENTER" prefWidth="104.00006103515625" style="" styleClass="font-nav-values" text="0" textAlignment="CENTER" GridPane.columnIndex="2" GridPane.rowIndex="3" />
                     <CheckBox fx:id="chk_getLocation" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" selected="true" text="" GridPane.columnIndex="0" GridPane.rowIndex="0" />

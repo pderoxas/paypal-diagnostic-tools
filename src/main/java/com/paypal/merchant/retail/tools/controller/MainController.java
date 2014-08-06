@@ -2,13 +2,14 @@ package com.paypal.merchant.retail.tools.controller;
 
 import com.paypal.merchant.retail.tools.Main;
 import com.paypal.merchant.retail.tools.client.SdkClient;
+import com.paypal.merchant.retail.tools.control.dialogs.AboutDialog;
 import com.paypal.merchant.retail.tools.exception.ClientException;
+import com.paypal.merchant.retail.tools.exception.SerializationException;
 import com.paypal.merchant.retail.tools.model.Stat;
-import com.paypal.merchant.retail.tools.util.OneTimeTaskScheduler;
-import com.paypal.merchant.retail.tools.util.RepeatingTaskScheduler;
-import com.paypal.merchant.retail.tools.util.TaskScheduler;
+import com.paypal.merchant.retail.tools.util.*;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -18,9 +19,12 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import org.controlsfx.dialog.Dialogs;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.text.DateFormat;
@@ -49,6 +53,9 @@ public class MainController implements Initializable, ManagedPane {
     private TaskScheduler repeatingTaskScheduler;
     private Map<String, Runnable> repeatingRunnableMap = new HashMap<>();
 
+    //Message Dialog
+    private final AboutDialog aboutDialog = new AboutDialog();
+
     @FXML
     private HBox mainHBox;
 
@@ -59,7 +66,7 @@ public class MainController implements Initializable, ManagedPane {
     private ImageView img_processing;
 
     @FXML
-    private Label lbl_getLocationAvg, lbl_setLocationAvailAvg, lbl_authorizeAvg, lbl_voidAvg;
+    private Label lbl_getLocationAvg, lbl_openLocationAvg, lbl_authorizeAvg, lbl_voidAvg;
 
     @FXML
     private Label lbl_getLocationSingle, lbl_setLocationAvailSingle, lbl_authorizeSingle, lbl_voidSingle;
@@ -72,6 +79,9 @@ public class MainController implements Initializable, ManagedPane {
 
     @FXML
     private ChoiceBox<Integer> cb_interval, cb_duration, cb_timeoutValue, cb_sampleSize;
+
+    @FXML
+    private Button btn_start, btn_stop, btn_send;
 
     @FXML
     private MenuBar mb_menuBar;
@@ -91,6 +101,8 @@ public class MainController implements Initializable, ManagedPane {
 
             oneTimeTaskScheduler = new OneTimeTaskScheduler(oneTimeRunnableMap, 0,
                     oneTimeRunnableMap.size(),  TimeUnit.MINUTES);
+            oneTimeTaskScheduler.addPropertyChangeListener(oneTimeTaskSchedulerChangeListener);
+
 
             paneManager = new PaneManager();
             paneManager.setId("rootPaneManager");
@@ -105,6 +117,7 @@ public class MainController implements Initializable, ManagedPane {
             initializeMenuBar();
             initializeCheckboxes();
             initializeChoiceBoxes();
+            initializeButtons();
 
         } catch (Exception e) {
             logger.error("Failed to initialize SDK Tool! ", e);
@@ -114,68 +127,65 @@ public class MainController implements Initializable, ManagedPane {
     private void initializeCheckboxes() {
         chk_getLocation.selectedProperty().addListener((ov, old_val, new_val) -> {
             if(new_val) {
-                LineChartScreenController.addGetLocation();
+                LineChartScreenController.showGetLocation();
             } else {
-                LineChartScreenController.removeGetLocation();
+                LineChartScreenController.hideGetLocation();
             }
         });
 
         chk_openLocation.selectedProperty().addListener((ov, old_val, new_val) -> {
             if(new_val) {
-                LineChartScreenController.addSetLocationAvailability();
+                LineChartScreenController.showSetLocationAvailability();
             } else {
-                LineChartScreenController.removeSetLocationAvailability();
+                LineChartScreenController.hideSetLocationAvailability();
             }
         });
 
         chk_authorize.selectedProperty().addListener((ov, old_val, new_val) -> {
             if(new_val) {
-                LineChartScreenController.addAuthorize();
+                LineChartScreenController.showAuthorize();
             } else {
-                LineChartScreenController.removeAuthorize();
+                LineChartScreenController.hideAuthorize();
             }
         });
 
         chk_void.selectedProperty().addListener((ov, old_val, new_val) -> {
             if(new_val) {
-                LineChartScreenController.addVoid();
+                LineChartScreenController.showVoid();
             } else {
-                LineChartScreenController.removeVoid();
+                LineChartScreenController.hideVoid();
             }
         });
 
-
-
-
         chk_getLocationSingle.selectedProperty().addListener((ov, old_val, new_val) -> {
             if(new_val) {
-                LineChartScreenController.addGetLocationSingle();
+                LineChartScreenController.showGetLocationSingle();
             } else {
-                LineChartScreenController.removeGetLocationSingle();
+                LineChartScreenController.hideGetLocationSingle();
             }
         });
 
         chk_openLocationSingle.selectedProperty().addListener((ov, old_val, new_val) -> {
             if(new_val) {
-                LineChartScreenController.addOpenLocationSingle();
+                LineChartScreenController.showOpenLocationSingle();
             } else {
-                LineChartScreenController.removeOpenLocationSingle();
+                LineChartScreenController.hideOpenLocationSingle();
             }
         });
 
         chk_authorizeSingle.selectedProperty().addListener((ov, old_val, new_val) -> {
             if(new_val) {
-                LineChartScreenController.addAuthorizeSingle();
+                LineChartScreenController.showAuthorizeSingle();
             } else {
-                LineChartScreenController.removeAuthorizeSingle();
+                LineChartScreenController.hideAuthorizeSingle();
             }
         });
 
         chk_voidSingle.selectedProperty().addListener((ov, old_val, new_val) -> {
             if(new_val) {
-                LineChartScreenController.addVoidSingle();
+                LineChartScreenController.showVoidSingle();
             } else {
-                LineChartScreenController.removeVoidSingle();
+                LineChartScreenController.hideVoidSingle();
             }
         });
     }
@@ -203,28 +213,102 @@ public class MainController implements Initializable, ManagedPane {
     }
 
     private void initializeMenuBar() {
-        Menu fileMenu = new Menu("File");
         MenuItem newFileMenuItem = new MenuItem("Clear");
         newFileMenuItem.setOnAction(clearLineChart());
 
         MenuItem saveFileMenuItem = new MenuItem("Save");
-        saveFileMenuItem.setDisable(true);
+        saveFileMenuItem.setOnAction(saveLineChartData());
 
-        MenuItem openFileMenuItem = new MenuItem("Open");
-        openFileMenuItem.setDisable(true);
-        fileMenu.getItems().addAll(newFileMenuItem, saveFileMenuItem, openFileMenuItem);
+        MenuItem loadFileMenuItem = new MenuItem("Load");
+        loadFileMenuItem.setDisable(true);
 
+        //File
+        Menu fileMenu = new Menu("File");
+        fileMenu.getItems().addAll(newFileMenuItem, saveFileMenuItem, loadFileMenuItem);
+
+        MenuItem aboutHelpMenuItem = new MenuItem("About");
+        aboutHelpMenuItem.setOnAction(showAboutDialog());
+
+        //Help
         Menu helpMenu = new Menu("Help");
-        MenuItem aboutHelpeMenuItem = new MenuItem("About");
-        helpMenu.getItems().addAll(aboutHelpeMenuItem);
+        helpMenu.getItems().addAll(aboutHelpMenuItem);
 
         mb_menuBar.getMenus().addAll(fileMenu, helpMenu);
+    }
 
+    private void initializeButtons() {
+
+        EventHandler<Event> onPressedHandler = event -> btn_send.setOpacity(0.5);
+        btn_send.setOnMousePressed(onPressedHandler);
+        btn_send.setOnTouchPressed(onPressedHandler);
+
+        EventHandler<Event> onReleasedHandler = event -> btn_send.setOpacity(1.0);
+        btn_send.setOnMouseReleased(onReleasedHandler);
+        btn_send.setOnTouchReleased(onReleasedHandler);
     }
 
     private EventHandler<ActionEvent> clearLineChart() {
         return event -> LineChartScreenController.clearAll();
     }
+
+    private EventHandler<ActionEvent> saveLineChartData() {
+        return event -> {
+            try {
+                SerializationUtils.serializeToXML(SdkClient.INSTANCE.getLineChartData(), "data/" + System.currentTimeMillis() + "-line.xml");
+            } catch (SerializationException e) {
+                logger.error("Failed to save LineChart LocationData");
+            }
+        };
+    }
+
+    private EventHandler<ActionEvent> showAboutDialog() {
+        return event -> {
+            //aboutDialog.show(null, "About", "Version " + PropertyManager.INSTANCE.getProperty("application.version"));
+            Dialogs.create()
+                    .owner( paneManager)
+                    .title("About")
+                    .masthead(null)
+                    .message( "Version " + PropertyManager.INSTANCE.getProperty("application.version"))
+                    .showInformation();
+        };
+    }
+
+
+
+//    private EventHandler<ActionEvent> loadLineChartData(File selectedFile) {
+//        return event -> {
+//            try {
+//                LineChartScreenController.clearAll();
+//                Map<String, List<Stat>> lineChartData = SerializationUtils.deserializeFromXML(selectedFile.toPath());
+//                for(String key : lineChartData.keySet()) {
+//
+//                    switch(key) {
+//                        case "GetLocation":
+//                            plotStats(LineChartScreenController.REPEATING_GET_LOCATION_PLOTS, lbl_getLocationAvg, lineChartData.get(key));
+//                            break;
+//                        case "OpenLocation":
+//                            plotStats(LineChartScreenController.REPEATING_OPEN_LOCATION_PLOTS, lbl_openLocationAvg, lineChartData.get(key));
+//                            break;
+//                        case "Authorization":
+//                            plotStats(LineChartScreenController.REPEATING_AUTHORIZE_PLOTS, lbl_authorizeAvg, lineChartData.get(key));
+//                            break;
+//                        case "Void":
+//                            plotStats(LineChartScreenController.REPEATING_VOID_PLOTS, lbl_voidAvg, lineChartData.get(key));
+//                            break;
+//                        default:
+//                            logger.error("Unknown stat list: " + key);
+//                            break;
+//                    }
+//                }
+//            } catch (SerializationException e) {
+//                logger.error("Failed to save LineChart LocationData");
+//            }
+//        };
+//    }
+
+
+
+
 
     @Override
     public void setParent(PaneManager paneManager) {
@@ -256,6 +340,9 @@ public class MainController implements Initializable, ManagedPane {
                 cb_interval.getSelectionModel().getSelectedItem(),
                 repeatingRunnableMap.size(), TimeUnit.MINUTES,
                 cb_duration.getSelectionModel().getSelectedItem() * 60000);
+
+        repeatingTaskScheduler.addPropertyChangeListener(repeatingTaskSchedulerChangeListener);
+
         repeatingTaskScheduler.start();
         event.consume();
     }
@@ -281,7 +368,7 @@ public class MainController implements Initializable, ManagedPane {
         } catch (ClientException e) {
             logger.error("Failed to set Store Location Availability");
         } finally {
-            plotSingleStat(LineChartScreenController.getLocationDataSingle, lbl_getLocationSingle, SdkClient.INSTANCE.getGetLocationStat());
+            plotSingleStat(LineChartScreenController.ONE_TIME_GET_LOCATION_PLOT, lbl_getLocationSingle, SdkClient.INSTANCE.getGetLocationStat());
         }
     };
 
@@ -294,7 +381,7 @@ public class MainController implements Initializable, ManagedPane {
         } catch (ClientException e) {
             logger.error("Failed to set Store Location Availability");
         } finally {
-            plotSingleStat(LineChartScreenController.openLocationDataSingle, lbl_setLocationAvailSingle, SdkClient.INSTANCE.getOpenLocationStat());
+            plotSingleStat(LineChartScreenController.ONE_TIME_OPEN_LOCATION_PLOT, lbl_setLocationAvailSingle, SdkClient.INSTANCE.getOpenLocationStat());
         }
     };
 
@@ -315,8 +402,8 @@ public class MainController implements Initializable, ManagedPane {
         } catch (ClientException e) {
             logger.error("Failed to set Store Location Availability");
         } finally {
-            plotSingleStat(LineChartScreenController.authorizeDataSingle, lbl_authorizeSingle, SdkClient.INSTANCE.getAuthorizationStat());
-            plotSingleStat(LineChartScreenController.voidDataSingle, lbl_voidSingle, SdkClient.INSTANCE.getVoidStat());
+            plotSingleStat(LineChartScreenController.ONE_TIME_AUTHORIZE_PLOT, lbl_authorizeSingle, SdkClient.INSTANCE.getAuthorizationStat());
+            plotSingleStat(LineChartScreenController.ONE_TIME_VOID_PLOT, lbl_voidSingle, SdkClient.INSTANCE.getVoidStat());
         }
     };
 
@@ -329,7 +416,7 @@ public class MainController implements Initializable, ManagedPane {
         } catch (ClientException e) {
             logger.error("Failed to set Store Location Availability");
         } finally {
-            plotLastStat(LineChartScreenController.getLocationData, lbl_getLocationAvg, SdkClient.INSTANCE.getGetLocationStats());
+            plotLastStat(LineChartScreenController.REPEATING_GET_LOCATION_PLOTS, lbl_getLocationAvg, SdkClient.INSTANCE.getGetLocationStats());
         }
     };
 
@@ -342,7 +429,7 @@ public class MainController implements Initializable, ManagedPane {
         } catch (ClientException e) {
             logger.error("Failed to set Store Location Availability");
         } finally {
-            plotLastStat(LineChartScreenController.openLocationData, lbl_setLocationAvailAvg, SdkClient.INSTANCE.getOpenLocationStats());
+            plotLastStat(LineChartScreenController.REPEATING_OPEN_LOCATION_PLOTS, lbl_openLocationAvg, SdkClient.INSTANCE.getOpenLocationStats());
         }
     };
 
@@ -363,8 +450,8 @@ public class MainController implements Initializable, ManagedPane {
         } catch (ClientException e) {
             logger.error("Failed to set Store Location Availability");
         } finally {
-            plotLastStat(LineChartScreenController.authorizeData, lbl_authorizeAvg, SdkClient.INSTANCE.getAuthorizationStats());
-            plotLastStat(LineChartScreenController.voidData, lbl_voidAvg, SdkClient.INSTANCE.getVoidStats());
+            plotLastStat(LineChartScreenController.REPEATING_AUTHORIZE_PLOTS, lbl_authorizeAvg, SdkClient.INSTANCE.getAuthorizationStats());
+            plotLastStat(LineChartScreenController.REPEATING_VOID_PLOTS, lbl_voidAvg, SdkClient.INSTANCE.getVoidStats());
         }
     };
 
@@ -412,6 +499,52 @@ public class MainController implements Initializable, ManagedPane {
             }
         });
     }
+
+    private void plotStats(XYChart.Series series, Label avgElapsedTimeLabel, List<Stat> stats) {
+        if (stats.size() == 0) {
+            return;
+        }
+
+        long total = 0;
+        for(Stat stat : stats) {
+            Date date = new Date(stat.getStartTime());
+            String xValue = formatter.format(date);
+            long yValue = stat.getElapsedTime() / 1000000;  // get milliseconds
+            total = total + stat.getElapsedTime();
+            Platform.runLater(() -> {
+                series.getData().add(new XYChart.Data(xValue, yValue));
+            });
+        }
+
+        long avgElapsedTime = (total / stats.size()) / 1000000;  // get milliseconds
+        Platform.runLater(() -> {
+            avgElapsedTimeLabel.setText(String.valueOf(avgElapsedTime));
+        });
+    }
+
+
+    private PropertyChangeListener repeatingTaskSchedulerChangeListener = new PropertyChangeListener() {
+        public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
+            if (propertyChangeEvent.getPropertyName().equals("isStarted")) {
+                Platform.runLater(() -> {
+                    btn_start.setDisable((Boolean) propertyChangeEvent.getNewValue());
+                    btn_stop.setDisable(! (Boolean) propertyChangeEvent.getNewValue());
+                });
+            }
+        }
+    };
+
+    private PropertyChangeListener oneTimeTaskSchedulerChangeListener = new PropertyChangeListener() {
+        public void propertyChange(PropertyChangeEvent propertyChangeEvent) {
+            if (propertyChangeEvent.getPropertyName().equals("isStarted")) {
+                Platform.runLater(() -> {
+                    btn_send.setDisable((Boolean) propertyChangeEvent.getNewValue());
+                });
+            }
+        }
+    };
+
+
 
 
 

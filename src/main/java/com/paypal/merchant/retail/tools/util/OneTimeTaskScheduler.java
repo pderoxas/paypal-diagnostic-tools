@@ -26,6 +26,7 @@ public class OneTimeTaskScheduler extends TaskScheduler {
 
     @Override
     public void start() {
+        super.start();
         try {
             logger.debug("Setting the schedule of tasks.");
             scheduledFutureMap = new HashMap<>();
@@ -33,6 +34,7 @@ public class OneTimeTaskScheduler extends TaskScheduler {
                 scheduledFutureMap.put(runnableKey,
                         super.service.schedule(super.runnableMap.get(runnableKey), initialWait, timeUnit));
             }
+            this.stop();
         } catch (Exception e) {
             logger.error(e.getMessage());
         }
@@ -40,6 +42,7 @@ public class OneTimeTaskScheduler extends TaskScheduler {
 
     @Override
     public void stop() {
+        super.stop();
         if(scheduledFutureMap != null) {
             logger.info("Stop the task scheduler. No more future tasks will be executed.");
             for(ScheduledFuture<?> scheduledFuture : scheduledFutureMap.values()) {

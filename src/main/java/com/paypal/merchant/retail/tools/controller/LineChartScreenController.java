@@ -20,15 +20,15 @@ import java.util.ResourceBundle;
 public class LineChartScreenController implements Initializable, ManagedPane {
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    public static XYChart.Series getLocationData = new XYChart.Series();
-    public static XYChart.Series openLocationData = new XYChart.Series();
-    public static XYChart.Series authorizeData = new XYChart.Series();
-    public static XYChart.Series voidData = new XYChart.Series();
+    public final static XYChart.Series REPEATING_GET_LOCATION_PLOTS = new XYChart.Series();
+    public final static XYChart.Series REPEATING_OPEN_LOCATION_PLOTS = new XYChart.Series();
+    public final static XYChart.Series REPEATING_AUTHORIZE_PLOTS = new XYChart.Series();
+    public final static XYChart.Series REPEATING_VOID_PLOTS = new XYChart.Series();
 
-    public static XYChart.Series getLocationDataSingle = new XYChart.Series();
-    public static XYChart.Series openLocationDataSingle = new XYChart.Series();
-    public static XYChart.Series authorizeDataSingle = new XYChart.Series();
-    public static XYChart.Series voidDataSingle = new XYChart.Series();
+    public final static XYChart.Series ONE_TIME_GET_LOCATION_PLOT = new XYChart.Series();
+    public final static XYChart.Series ONE_TIME_OPEN_LOCATION_PLOT = new XYChart.Series();
+    public final static XYChart.Series ONE_TIME_AUTHORIZE_PLOT = new XYChart.Series();
+    public final static XYChart.Series ONE_TIME_VOID_PLOT = new XYChart.Series();
 
     private static LineChart<String,Number> lineChart;
     @FXML
@@ -52,22 +52,22 @@ public class LineChartScreenController implements Initializable, ManagedPane {
             lineChart.setPrefHeight(577);
 
             // Set Key Names
-            getLocationData.setName("Get Location (repeating)");
-            openLocationData.setName("Open Location (repeating)");
-            authorizeData.setName("Authorization (repeating)");
-            voidData.setName("Void (repeating)");
+            REPEATING_GET_LOCATION_PLOTS.setName("Get Location (repeating)");
+            REPEATING_OPEN_LOCATION_PLOTS.setName("Open Location (repeating)");
+            REPEATING_AUTHORIZE_PLOTS.setName("Authorization (repeating)");
+            REPEATING_VOID_PLOTS.setName("Void (repeating)");
 
-            getLocationDataSingle.setName("Get Location (one-time)");
-            openLocationDataSingle.setName("Open Location (one-time)");
-            authorizeDataSingle.setName("Authorization (one-time)");
-            voidDataSingle.setName("Void (one-time)");
+            ONE_TIME_GET_LOCATION_PLOT.setName("Get Location (one-time)");
+            ONE_TIME_OPEN_LOCATION_PLOT.setName("Open Location (one-time)");
+            ONE_TIME_AUTHORIZE_PLOT.setName("Authorization (one-time)");
+            ONE_TIME_VOID_PLOT.setName("Void (one-time)");
 
             xAxis.setAnimated(true);
             yAxis.setAnimated(true);
             lineChart.setAnimated(true);
 
-            lineChart.getData().addAll(authorizeData, voidData, getLocationData, openLocationData);
-            lineChart.getData().addAll(authorizeDataSingle, voidDataSingle, getLocationDataSingle, openLocationDataSingle);
+            lineChart.getData().addAll(REPEATING_AUTHORIZE_PLOTS, REPEATING_VOID_PLOTS, REPEATING_GET_LOCATION_PLOTS, REPEATING_OPEN_LOCATION_PLOTS);
+            lineChart.getData().addAll(ONE_TIME_AUTHORIZE_PLOT, ONE_TIME_VOID_PLOT, ONE_TIME_GET_LOCATION_PLOT, ONE_TIME_OPEN_LOCATION_PLOT);
             lineChartPane.getChildren().add(lineChart);
 
         } catch (Exception e) {
@@ -75,65 +75,65 @@ public class LineChartScreenController implements Initializable, ManagedPane {
         }
     }
 
-    public static void addAuthorize() {
-        addData(authorizeData);
+    public static void showAuthorize() {
+        addData(REPEATING_AUTHORIZE_PLOTS);
     }
-    public static void removeAuthorize() {
-        removeData(authorizeData);
+    public static void hideAuthorize() {
+        removeData(REPEATING_AUTHORIZE_PLOTS);
     }
-    public static void addVoid() {
-        addData(voidData);
+    public static void showVoid() {
+        addData(REPEATING_VOID_PLOTS);
     }
-    public static void removeVoid() {
-        removeData(voidData);
+    public static void hideVoid() {
+        removeData(REPEATING_VOID_PLOTS);
     }
-    public static void addGetLocation() {
-        addData(getLocationData);
+    public static void showGetLocation() {
+        addData(REPEATING_GET_LOCATION_PLOTS);
     }
-    public static void removeGetLocation() {
-        removeData(getLocationData);
+    public static void hideGetLocation() {
+        removeData(REPEATING_GET_LOCATION_PLOTS);
     }
-    public static void addSetLocationAvailability() {
-        addData(openLocationData);
+    public static void showSetLocationAvailability() {
+        addData(REPEATING_OPEN_LOCATION_PLOTS);
     }
-    public static void removeSetLocationAvailability() {
-        removeData(openLocationData);
+    public static void hideSetLocationAvailability() {
+        removeData(REPEATING_OPEN_LOCATION_PLOTS);
     }
-    public static void addAuthorizeSingle() {
-        addData(authorizeDataSingle);
+    public static void showAuthorizeSingle() {
+        addData(ONE_TIME_AUTHORIZE_PLOT);
     }
-    public static void removeAuthorizeSingle() {
-        removeData(authorizeDataSingle);
+    public static void hideAuthorizeSingle() {
+        removeData(ONE_TIME_AUTHORIZE_PLOT);
     }
-    public static void addVoidSingle() {
-        addData(voidDataSingle);
+    public static void showVoidSingle() {
+        addData(ONE_TIME_VOID_PLOT);
     }
-    public static void removeVoidSingle() {
-        removeData(voidDataSingle);
+    public static void hideVoidSingle() {
+        removeData(ONE_TIME_VOID_PLOT);
     }
-    public static void addGetLocationSingle() {
-        addData(getLocationDataSingle);
+    public static void showGetLocationSingle() {
+        addData(ONE_TIME_GET_LOCATION_PLOT);
     }
-    public static void removeGetLocationSingle() {
-        removeData(getLocationDataSingle);
+    public static void hideGetLocationSingle() {
+        removeData(ONE_TIME_GET_LOCATION_PLOT);
     }
-    public static void addOpenLocationSingle() {
-        addData(openLocationDataSingle);
+    public static void showOpenLocationSingle() {
+        addData(ONE_TIME_OPEN_LOCATION_PLOT);
     }
-    public static void removeOpenLocationSingle() {
-        removeData(openLocationDataSingle);
+    public static void hideOpenLocationSingle() {
+        removeData(ONE_TIME_OPEN_LOCATION_PLOT);
     }
 
     public static void clearAll() {
-        getLocationData.getData().clear();
-        openLocationData.getData().clear();
-        authorizeData.getData().clear();
-        voidData.getData().clear();
+        REPEATING_GET_LOCATION_PLOTS.getData().clear();
+        REPEATING_OPEN_LOCATION_PLOTS.getData().clear();
+        REPEATING_AUTHORIZE_PLOTS.getData().clear();
+        REPEATING_VOID_PLOTS.getData().clear();
 
-        getLocationDataSingle.getData().clear();
-        openLocationDataSingle.getData().clear();
-        authorizeDataSingle.getData().clear();
-        voidDataSingle.getData().clear();
+        ONE_TIME_GET_LOCATION_PLOT.getData().clear();
+        ONE_TIME_OPEN_LOCATION_PLOT.getData().clear();
+        ONE_TIME_AUTHORIZE_PLOT.getData().clear();
+        ONE_TIME_VOID_PLOT.getData().clear();
     }
 
 
